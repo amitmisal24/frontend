@@ -1,24 +1,53 @@
-import logo from './logo.svg';
 import './App.css';
+import { MdOutlineMenu } from "react-icons/md"
+import HorizonalLine from './component/horizonalLine';
+import Header from './component/Header';
+import Welcome from './component/Welcome';
+import Education from './component/Education';
+import Skills from './component/Skills';
+import Project from './component/Project';
+import Contact from './component/Contact';
+import Footer from './component/Footer';
+import { useState } from 'react';
+
+
+
 
 function App() {
+  const [openMenu,setOpenMenu] = useState(false)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <>
+      {
+        openMenu && <div className='menu_container'>
+                <button onClick={()=>setOpenMenu(false)} className="close">Close</button>
+                <a href='#home'>Home</a>
+                <a href='#project'>Project</a>
+                <a href='#education'>Education</a>
+                <a href='#contact'>Contact</a>
+                <a href='#welcome'>About</a>
+        </div>
+      }
+      
+      <header>
+        <div className='top'>
+          <div className="logo">Amit Misal</div>
+          <MdOutlineMenu  onClick={()=>setOpenMenu(true)}/>
+        </div>
+        <Header />
       </header>
-    </div>
+      <main>
+        <HorizonalLine />
+        <Welcome />
+        <div className='horizontal_reverse'>
+          <HorizonalLine />
+        </div>
+        <Education />
+        <Skills />
+        <Project />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }
 
