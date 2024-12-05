@@ -30,7 +30,7 @@ const Contact = () => {
     if (Object.keys(newErrors).length === 0) {
       try {
         // Send data to the backend API
-        const response = await fetch('http://localhost:5000/api/submitForm', {  // Update URL if deployed
+        const response = await fetch('https://backend-portfolio-1-kh3g.onrender.com/api/submitForm', {  // Update URL if deployed
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
