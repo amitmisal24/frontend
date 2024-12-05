@@ -3,6 +3,7 @@ import {MdEmail,MdPhoneInTalk,MdLocationOn} from "react-icons/md"
 import {SiLinkedin,SiInstagram,SiGithub} from "react-icons/si"
 import { useState } from 'react'
 
+
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [errors, setErrors] = useState({});
@@ -13,10 +14,11 @@ const Contact = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
+    // Basic validation checks
     if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.email) {
       newErrors.email = 'Email is required';
@@ -26,20 +28,35 @@ const Contact = () => {
     if (!formData.message) newErrors.message = 'Message is required';
 
     if (Object.keys(newErrors).length === 0) {
-      // Add email-sending logic here (e.g., using an API or service like EmailJS)
-      console.log('Form Data Submitted:', formData);
-      setIsSubmitted(true);
-      // Clear the form
-      setFormData({ name: '', email: '', message: '' });
+      try {
+        // Send data to the backend API
+        const response = await fetch('http://localhost:5000/api/submitForm', {  // Update URL if deployed
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setIsSubmitted(true);
+          setFormData({ name: '', email: '', message: '' });  // Clear the form
+        } else {
+          const result = await response.json();
+          alert(`Submission failed: ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('An error occurred while submitting the form.');
+      }
     } else {
-      setErrors(newErrors);
+      setErrors(newErrors);  // Display validation errors
     }
   };
+
   return (
      <div className='contact' id='contact'>
       <h1 className='heading'>Contact Us</h1>
       <div className='contact_content'>
-       <form className='contact-from'>
+       <form className='contact-from' onSubmit={handleSubmit}>
 
       <input type="text" name="name"placeholder='Name' value={formData.name} onChange={handleChange}/>
       {errors.name && <p className="error">{errors.name}</p>}
@@ -73,7 +90,7 @@ const Contact = () => {
       </div>
 
       <div className='socialMedia_personal'>
-        <a href='https://www.linkedin.com/in/amit-misal-72449833a/'><SiLinkedin/></a>
+        <a href='https://www.linkedin.com/in/amitmisal/'><SiLinkedin/></a>
         <a href='https://www.instagram.com/am1tm1sal'><SiInstagram/></a>
         <a href='https://github.com/amitmisal24'><SiGithub/></a>
       </div>  
